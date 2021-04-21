@@ -22,11 +22,6 @@
 * SOFTWARE.
 */
 
-/*
-Compile With:
-g++ -o benchmark benchmark.cpp ../griffinLog.cpp
-*/
-
 #include <stdio.h>
 
 #if defined(WIN32) || defined(_WIN32)
@@ -40,7 +35,7 @@ g++ -o benchmark benchmark.cpp ../griffinLog.cpp
 
 #endif // WIN32 || _WIN32
 
-#include "../griffinLog.h"
+#include "../src/griffinLog/griffinLog.h"
 
 
 double get_time()

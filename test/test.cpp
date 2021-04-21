@@ -23,7 +23,7 @@
 */
 
 #include <iostream>
-#include "../griffinLog.h"
+#include "../src/griffinLog/griffinLog.h"
 
 int main()
 {

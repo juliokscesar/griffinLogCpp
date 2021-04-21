@@ -1,1 +1,1 @@
-g++ -o benchmark benchmark.cpp ../griffinLog.cpp -lpthread
+g++ -o benchmark benchmark.cpp ../src/griffinLog/griffinLog.cpp -lpthread
