@@ -1,3 +1,27 @@
+/* 
+* MIT License
+* 
+* Copyright (c) 2021 juliokscesar
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+
 #include "griffinLog.h"
 
 #include <ctime>
@@ -7,7 +31,7 @@
 #include <thread>
 #include <exception>
 
-#ifdef GRIFFIN_LOG_WIN32
+#if defined(GRIFFIN_LOG_WIN32)
     #include <Windows.h>
 #elif defined(GRIFFIN_LOG_LINUX)
     #include <sys/stat.h>
@@ -19,7 +43,7 @@ namespace grflog
     {
         void make_directory(const std::string& dir_path)
         {
-            #ifdef GRIFFIN_LOG_WIN32
+            #if defined(GRIFFIN_LOG_WIN32)
 
             CreateDirectoryA(dir_path.c_str(), nullptr);
 
@@ -56,15 +80,37 @@ namespace grflog
             return log_level_colors[static_cast<uint32_t>(lvl)];
         }
 
+        #ifdef GRIFFIN_LOG_WIN32
+        /// Function to get the default text attributes in Windows. Really bad, but will stay like that for now.
+        /// @returns WORD default console's attributes.
+        static WORD get_win32_default_attributes()
+        {
+            static bool already_got = false;
+            static WORD attrb;
+
+            if (!already_got)
+            {
+                CONSOLE_SCREEN_BUFFER_INFO Info;
+                HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+                GetConsoleScreenBufferInfo(hStdout, &Info);
+                attrb = Info.wAttributes;
+                already_got = true;
+            }
+            
+            return attrb;
+        }
+        #endif // GRIFFIN_LOG_WIN32
+
         const GRIFFIN_COLOR_RES set_text_color(const GRIFFIN_COLOR& color)
         {
             #if defined(GRIFFIN_LOG_WIN32)
-
-            // TODO: Implement set text color for Win32
+            
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
+            return "";
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            return GRIFFIN_COLOR_RES(color);
+            return color;
 
             #endif
         }
@@ -73,11 +119,12 @@ namespace grflog
         {
              #if defined(GRIFFIN_LOG_WIN32)
 
-            // TODO: Implement reset text color for Win32
+            SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), get_win32_default_attributes());
+            return "";
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            return GRIFFIN_COLOR_RES(GRIFFIN_COLOR_RESET);
+            return GRIFFIN_COLOR_RESET;
 
             #endif
         }
@@ -105,6 +152,8 @@ namespace grflog
 
     void console_log(const log_event& l_ev)
     {
+        visual::reset_text_color();
+
         std::cout << "[" << l_ev.date_time << "] [";
         std::cout << visual::set_text_color(l_ev.log_lvl_color) << l_ev.log_lvl_str << visual::reset_text_color();
         std::cout << "] " << l_ev.formatted_what << "\n";
@@ -184,9 +233,6 @@ namespace grflog
         {
             m_file.flush();
             m_file.close();
-
-            m_file_name = "";
-            m_file_path = "";
         }
     }
 

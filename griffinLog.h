@@ -1,3 +1,28 @@
+/* 
+* MIT License
+* 
+* Copyright (c) 2021 juliokscesar
+* 
+* Permission is hereby granted, free of charge, to any person obtaining a copy
+* of this software and associated documentation files (the "Software"), to deal
+* in the Software without restriction, including without limitation the rights
+* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+* copies of the Software, and to permit persons to whom the Software is
+* furnished to do so, subject to the following conditions:
+* 
+* The above copyright notice and this permission notice shall be included in all
+* copies or substantial portions of the Software.
+* 
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+* SOFTWARE.
+*/
+
+
 #ifndef GRIFFIN_LOG_H
 #define GRIFFIN_LOG_H
 
@@ -18,7 +43,7 @@
 #endif // WIN32 || _WIN32
 
 // Griffin Color Definitions
-#ifdef GRIFFIN_LOG_WIN32
+#if defined(GRIFFIN_LOG_WIN32)
     typedef DWORD GRIFFIN_COLOR;
 
     #define GRIFFIN_COLOR_RED       0x0c
