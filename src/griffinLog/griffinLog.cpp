@@ -24,6 +24,7 @@
 
 #include "griffinLog.h"
 
+#include <cstdint>
 #include <ctime>
 #include <cstdio>
 #include <array>
@@ -134,14 +135,11 @@ namespace grflog
     {
         const std::string datetime = utils::get_date_time();
         
-        const std::string lvl_str = visual::get_log_lvl_str(lvl);
-        const GRIFFIN_COLOR lvl_color = visual::get_log_lvl_color(lvl);
-
         std::size_t fmt_log_sz = what.size() + 256;
         char fmt_log[fmt_log_sz];
         vsnprintf(fmt_log, fmt_log_sz - 1, what.c_str(), vaArgs);
 
-        log_event l_ev(datetime, lvl_str, lvl_color, std::string(fmt_log));
+        log_event l_ev(datetime, lvl, std::string(fmt_log));
 
         std::thread console_thrd(console_log, l_ev);
         std::thread file_thrd(file_log, l_ev);
@@ -186,24 +184,31 @@ namespace grflog
         m_file_path = "./logs/" + m_file_name;
     }
 
+    bool file_logger::is_initialized()
+    {
+        return m_file.is_open();
+    }
+
     bool file_logger::init_file_logging()
     {
         if (m_file_name == "" && m_file_path == "")
             set_file_name("grflog_file.log");
 
-        if (!m_file.is_open())
+        if (!is_initialized())
         {
             utils::make_directory("./logs");
             m_file.open(m_file_path, std::ios::out);
         }
 
+        else
+        {
+            finish_file_logging();
+            m_file.open(m_file_path);
+        }
+
         return m_file.is_open();
     }
 
-    bool file_logger::is_initialized()
-    {
-        return m_file.is_open();
-    }
 
     void file_logger::write_to_file(const std::string& what)
     {
@@ -241,6 +246,7 @@ namespace grflog
         finish_file_logging();
     }
 
+
     /// Get the file used for logging.
     /// @returns A file_logger reference to keep track of file to log.
     static file_logger& get_file_logger()
@@ -249,7 +255,7 @@ namespace grflog
         return f;
     }
 
-    void add_file_logger(const file_logger& file)
+    void set_file_logger(const file_logger& file)
     {
         file_logger& fl = get_file_logger();
 
@@ -260,6 +266,11 @@ namespace grflog
 
         if (!fl.init_file_logging())
             critical("Couldn't add file");
+    }
+
+    void stop_file_logging()
+    {
+        get_file_logger().finish_file_logging();
     }
 
     void file_log(const log_event& l_ev)

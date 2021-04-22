@@ -22,7 +22,7 @@
 * SOFTWARE.
 */
 
-#include <stdio.h>
+#include <iostream>
 
 #if defined(WIN32) || defined(_WIN32)
 
@@ -55,9 +55,9 @@ double get_time()
 
 int main()
 {
-    double start = get_time();
+    double simple_start = get_time();
     
-    grflog::add_file_logger(grflog::file_logger("benchmark.log"));
+    grflog::set_file_logger(grflog::file_logger("benchmark.log"));
 
     grflog::info("Writing INFO to log");
     grflog::debug("Writing %s logging", "debug");
@@ -65,8 +65,23 @@ int main()
     grflog::critical("Testing critical log %s", "on benchmark.cpp");
     grflog::fatal("Writing fatal %s to log benchmarking", "message");
 
-    double end = get_time();
+    double simple_end = get_time();
 
-    printf("Duration = %fms\n", (end - start) * 1000);
+    double loop_log_start = get_time();
+
+    grflog::stop_file_logging();
+
+    for (int i = 0; i < 100; i++)
+    {
+        grflog::info("Info in loop %d", i);
+        grflog::info("Info in loop %d", i);
+        grflog::fatal("Fatal logging loop squared: %d", i*i);
+    }
+
+    double loop_log_end = get_time();
+
+    std::cout << "Simple duration: " << (simple_end - simple_start) * 1000 << " ms\n";
+    std::cout << "Loop duration: " << (loop_log_end - loop_log_start) * 1000 << " ms\n";
+
     return 0;
 }

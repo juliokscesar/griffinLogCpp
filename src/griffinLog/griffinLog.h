@@ -115,6 +115,7 @@ namespace grflog
     {
         const std::string date_time;
 
+        const log_level log_lvl;
         const std::string log_lvl_str;
         const GRIFFIN_COLOR log_lvl_color;
 
@@ -125,8 +126,9 @@ namespace grflog
         /// @param llvl_s Log level String correspondent to this event's log level (see visual::get_log_lvl_str())
         /// @param llvl_c Log Level Color correspondent to this event's log level (see visual::get_log_lvl_color())
         /// @param fmt_what "Formatted What" formatted message to log in this event
-        log_event(const std::string& dt, const std::string& llvl_s, const GRIFFIN_COLOR& llvl_c, const std::string& fmt_what)
-            : date_time(dt), log_lvl_str(llvl_s), log_lvl_color(llvl_c), formatted_what(fmt_what) {}
+        log_event(const std::string& dt, const log_level& llvl, const std::string& fmt_what)
+            : date_time(dt), log_lvl(llvl), log_lvl_str(visual::get_log_lvl_str(llvl)), 
+              log_lvl_color(visual::get_log_lvl_color(llvl)), formatted_what(fmt_what) {}
     };
 
     // Logging functions
@@ -168,14 +170,14 @@ namespace grflog
         /// @param other file_logger to be copied.
         void copy_from(const file_logger& other);
 
+        // Check if file logging has been initialized.
+        /// @returns true if it was initialized, else return false.
+        bool is_initialized();
+
         /// Initialize the file logging, will be called on add_file_log(). 
         /// If the file's name wasn't provided, it will open (or create) a file called by default "grflog_file.log"
         /// @returns true if successfully opened and initialized the file, otherwise return false if couldn't open the file.
         bool init_file_logging();
-
-        /// Check if file logging has been initialized.
-        /// @returns true if it was initialized, else return false.
-        bool is_initialized();
 
         /// Write any string to the file, get called on log() with every information in a log_event struct.
         /// @param what string message to be written.
@@ -200,10 +202,13 @@ namespace grflog
     };
 
 
-    /// Add a file_logger object to be used for file logging, by default grflog only logs to console.
+    /// Set the file_logger object to be used for file logging, by default grflog only logs to console.
+    /// If a file was previously openned, it will be finished and will open the new one.
     /// @param file file_logger object to be used. If file's name is empty, throw an exception.
-    void add_file_logger(const file_logger& file);
+    void set_file_logger(const file_logger& file);
 
+    /// Stop current file from logging if there was one.
+    void stop_file_logging();
 
     /// File logging function, will be called from log().
     /// @param l_ev Log event struct to be used for logging the information into a file.
