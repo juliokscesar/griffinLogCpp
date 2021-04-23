@@ -29,8 +29,6 @@
 #include <cstdio>
 #include <array>
 #include <vector>
-#include <thread>
-#include <exception>
 
 #if defined(GRIFFIN_LOG_WIN32)
     #include <Windows.h>
@@ -71,13 +69,13 @@ namespace grflog
     {
         const std::string get_log_lvl_str(const log_level& lvl)
         {
-            static std::array<std::string, 5> log_level_strs = { "INFO", "DEBUG", "WARN", "CRITICAL", "FATAL" };
+            const std::array<const std::string, 5> log_level_strs = { "INFO", "DEBUG", "WARN", "CRITICAL", "FATAL" };
             return log_level_strs[static_cast<uint32_t>(lvl)];
         }
 
         const GRIFFIN_COLOR get_log_lvl_color(const log_level& lvl)
         {
-            static std::array<GRIFFIN_COLOR, 5> log_level_colors = { GRIFFIN_COLOR_BLUE, GRIFFIN_COLOR_GREEN, GRIFFIN_COLOR_YELLOW, GRIFFIN_COLOR_RED, GRIFFIN_COLOR_BLACK_RED };
+            static const std::array<const GRIFFIN_COLOR, 5> log_level_colors = { GRIFFIN_COLOR_BLUE, GRIFFIN_COLOR_GREEN, GRIFFIN_COLOR_YELLOW, GRIFFIN_COLOR_RED, GRIFFIN_COLOR_BLACK_RED };
             return log_level_colors[static_cast<uint32_t>(lvl)];
         }
 
@@ -134,22 +132,21 @@ namespace grflog
     void log(log_level lvl, const std::string& what, va_list vaArgs)
     {
         const std::string datetime = utils::get_date_time();
-        
+
         std::size_t fmt_log_sz = what.size() + 256;
         char fmt_log[fmt_log_sz];
         vsnprintf(fmt_log, fmt_log_sz - 1, what.c_str(), vaArgs);
 
         log_event l_ev(datetime, lvl, std::string(fmt_log));
 
-        std::thread console_thrd(console_log, l_ev);
-        std::thread file_thrd(file_log, l_ev);
-
-        console_thrd.join();
-        file_thrd.join();
+        console_log(l_ev);
+        file_log(l_ev);
     }
 
     void console_log(const log_event& l_ev)
     {
+        std::ios::sync_with_stdio(false);
+
         visual::reset_text_color();
 
         std::cout << "[" << l_ev.date_time << "] [";
@@ -169,8 +166,7 @@ namespace grflog
 
     file_logger::file_logger(const std::string& file_name)
     {
-        m_file_name = file_name;
-        m_file_path = "./logs/" + m_file_name;
+        set_file_name(file_name);
     }
 
     file_logger::file_logger(const file_logger& other)
@@ -180,8 +176,7 @@ namespace grflog
 
     void file_logger::copy_from(const file_logger& other)
     {
-        m_file_name = other.m_file_name;
-        m_file_path = "./logs/" + m_file_name;
+        set_file_name(other.m_file_name);
     }
 
     bool file_logger::is_initialized()
@@ -191,7 +186,7 @@ namespace grflog
 
     bool file_logger::init_file_logging()
     {
-        if (m_file_name == "" && m_file_path == "")
+        if (m_file_name.empty() && m_file_path.empty())
             set_file_name("grflog_file.log");
 
         if (!is_initialized())
@@ -199,14 +194,13 @@ namespace grflog
             utils::make_directory("./logs");
             m_file.open(m_file_path, std::ios::out);
         }
-
         else
         {
             finish_file_logging();
             m_file.open(m_file_path);
         }
 
-        return m_file.is_open();
+        return is_initialized();
     }
 
 
@@ -222,14 +216,8 @@ namespace grflog
 
     void file_logger::set_file_name(const std::string& file_name)
     {
-        if (m_file_name == "" && m_file_path == "")
-        {
-            m_file_name = file_name;
-            m_file_path = "./logs/" + m_file_name;
-        }
-
-        else
-            throw std::runtime_error("file_logger (set_file_name()): Trying to update file's name, but it was already provided.");
+        m_file_name = file_name;
+        m_file_path = "./logs/" + m_file_name;
     }
 
     void file_logger::finish_file_logging()
@@ -259,11 +247,7 @@ namespace grflog
     {
         file_logger& fl = get_file_logger();
 
-        if (fl.is_initialized())
-            fl.finish_file_logging();
-
         fl.copy_from(file);
-
         if (!fl.init_file_logging())
             critical("Couldn't add file");
     }

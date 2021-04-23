@@ -207,7 +207,7 @@ namespace grflog
     /// @param file file_logger object to be used. If file's name is empty, throw an exception.
     void set_file_logger(const file_logger& file);
 
-    /// Stop current file from logging if there was one.
+    /// Stop current file from logging if there is one.
     void stop_file_logging();
 
     /// File logging function, will be called from log().
