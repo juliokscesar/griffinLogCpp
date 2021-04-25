@@ -110,7 +110,7 @@ namespace grflog
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            std::cout << color;
+            std::fputs(color.c_str(), stdout);
 
             #endif
         }
@@ -123,7 +123,7 @@ namespace grflog
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            std::cout << GRIFFIN_COLOR_RESET;
+            std::fputs(GRIFFIN_COLOR_RESET, stdout);
 
             #endif
         }
@@ -145,17 +145,15 @@ namespace grflog
 
     void console_log(const log_event& l_ev)
     {
-        std::ios::sync_with_stdio(false);
-
         visual::reset_text_color();
 
-        std::cout << "[" << l_ev.date_time << "] [";
+        std::fprintf(stdout, "[%s] [", l_ev.date_time.c_str());
 
         visual::set_text_color(l_ev.lvl);
-        std::cout << l_ev.log_lvl_str;
+        std::fputs(l_ev.log_lvl_str.c_str(), stdout);
         visual::reset_text_color();
 
-        std::cout << "] " << l_ev.formatted_what << "\n";
+        std::fprintf(stdout, "] %s\n", l_ev.formatted_what.c_str());
     }
 
 
