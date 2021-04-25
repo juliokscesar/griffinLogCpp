@@ -103,7 +103,7 @@ namespace grflog
         /// Function to set the console's text's color. Platform specific.
         /// @param color GRIFFIN_COLOR to set.
         /// @returns A GRIFFIN_COLOR_RES (result), will return the string of GRIFFIN_COLOR (ANSI escape) if on Linux, but on Windows return an empty string.
-        const GRIFFIN_COLOR_RES set_text_color(const GRIFFIN_COLOR& color);
+        const GRIFFIN_COLOR_RES set_text_color(const log_level& lvl);
 
         
         /// Function to reset the console's text's color. Platform specific.
@@ -115,9 +115,8 @@ namespace grflog
     {
         const std::string date_time;
 
-        const log_level log_lvl;
+        const log_level lvl;
         const std::string log_lvl_str;
-        const GRIFFIN_COLOR log_lvl_color;
 
         const std::string formatted_what;
 
@@ -127,8 +126,7 @@ namespace grflog
         /// @param llvl_c Log Level Color correspondent to this event's log level (see visual::get_log_lvl_color())
         /// @param fmt_what "Formatted What" formatted message to log in this event
         log_event(const std::string& dt, const log_level& llvl, const std::string& fmt_what)
-            : date_time(dt), log_lvl(llvl), log_lvl_str(visual::get_log_lvl_str(llvl)), 
-              log_lvl_color(visual::get_log_lvl_color(llvl)), formatted_what(fmt_what) {}
+            : date_time(dt), lvl(llvl), log_lvl_str(visual::get_log_lvl_str(llvl)), formatted_what(fmt_what) {} 
     };
 
     // Logging functions

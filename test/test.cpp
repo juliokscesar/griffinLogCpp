@@ -35,13 +35,21 @@ int main()
     grflog::critical("This is a %s message in %d.", "critical", 2021);
     grflog::fatal("This is a %s message in %d.", "fatal", 2021);
 
-    grflog::add_file_logger(grflog::file_logger("test.log"));
+    grflog::set_file_logger(grflog::file_logger("test.log"));
 
     grflog::info("This is a file writing test %s message in %d.", "info", 2021);
     grflog::debug("This is a file writing test %s message in %d.", "debug", 2021);
     grflog::warn("This is a file writing test %s message in %d.", "warn", 2021);
     grflog::critical("This is a file writing test %s message in %d.", "critical", 2021);
     grflog::fatal("This is a file writing test %s message in %d.", "fatal", 2021);
+
+    for (int i = 0; i < 124; i++)
+    {   
+        grflog::info("Info from loop!");
+        grflog::debug("Debugging from loop %d", i);
+        grflog::critical("It is really critical!");
+        grflog::fatal("Yes fatal is the square of %d which is %d", i, i*i);
+    }
 
     return 0;
 }

@@ -100,8 +100,10 @@ namespace grflog
         }
         #endif // GRIFFIN_LOG_WIN32
 
-        const GRIFFIN_COLOR_RES set_text_color(const GRIFFIN_COLOR& color)
+        const GRIFFIN_COLOR_RES set_text_color(const log_level& lvl)
         {
+            const GRIFFIN_COLOR color = get_log_lvl_color(lvl);
+
             #if defined(GRIFFIN_LOG_WIN32)
             
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
@@ -150,7 +152,7 @@ namespace grflog
         visual::reset_text_color();
 
         std::cout << "[" << l_ev.date_time << "] [";
-        std::cout << visual::set_text_color(l_ev.log_lvl_color) << l_ev.log_lvl_str << visual::reset_text_color();
+        std::cout << visual::set_text_color(l_ev.lvl) << l_ev.log_lvl_str << visual::reset_text_color();
         std::cout << "] " << l_ev.formatted_what << "\n";
     }
 
