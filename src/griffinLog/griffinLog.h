@@ -64,9 +64,6 @@
 
 #endif // GRIFFIN_LOG_WIN32
 
-typedef std::string GRIFFIN_COLOR_RES;
-
-
 namespace grflog
 {
     namespace utils
@@ -101,14 +98,11 @@ namespace grflog
 
 
         /// Function to set the console's text's color. Platform specific.
-        /// @param color GRIFFIN_COLOR to set.
-        /// @returns A GRIFFIN_COLOR_RES (result), will return the string of GRIFFIN_COLOR (ANSI escape) if on Linux, but on Windows return an empty string.
-        const GRIFFIN_COLOR_RES set_text_color(const log_level& lvl);
+        void set_text_color(const log_level& lvl);
 
         
         /// Function to reset the console's text's color. Platform specific.
-        /// @returns A GRIFFIN_COLOR_RES (result). Return ANSI escape string if on Linux, but on Windows use native function to reset and return an empty string.
-        const GRIFFIN_COLOR_RES reset_text_color();
+        void reset_text_color();
     }
 
     struct log_event
@@ -121,10 +115,9 @@ namespace grflog
         const std::string formatted_what;
 
         /// Log event constructor, get every needed information for a log event.
-        /// @param dt Date Time string formatted as: YYYY-mm-dd H:M:S (see utils::get_date_time())
-        /// @param llvl_s Log level String correspondent to this event's log level (see visual::get_log_lvl_str())
-        /// @param llvl_c Log Level Color correspondent to this event's log level (see visual::get_log_lvl_color())
-        /// @param fmt_what "Formatted What" formatted message to log in this event
+        /// @param dt Date Time string formatted as: YYYY-mm-dd H:M:S (see utils::get_date_time()).
+        /// @param llvl Log Level of this log event.
+        /// @param fmt_what "Formatted What" formatted message to log in this event.
         log_event(const std::string& dt, const log_level& llvl, const std::string& fmt_what)
             : date_time(dt), lvl(llvl), log_lvl_str(visual::get_log_lvl_str(llvl)), formatted_what(fmt_what) {} 
     };
@@ -135,6 +128,7 @@ namespace grflog
     /// call console_log() and file_log() (if file was added) passing the created log_event.
     /// @param lvl The log level to use. Enumerated in enum log_level.
     /// @param what The message to be logged.
+    /// @param vaArgs Variardic Args to format the log message.
     void log(log_level lvl, const std::string& what, va_list vaArgs);
 
 
