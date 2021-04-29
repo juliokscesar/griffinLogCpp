@@ -22,7 +22,7 @@ Before building, clone the repository into your project folder or any other plac
 * macOS - **Currently not supported**
 
 
-#### Linux
+### Linux
 * Static Library
     * Run `./build.sh` in the repo root folder, a folder called "build" will be created and inside it will be the static library built.
     * Include `griffinLog.h` and link the build library to your project.
@@ -30,7 +30,7 @@ Before building, clone the repository into your project folder or any other plac
 * Compiling
     * Add `griffinLog.cpp` to build with your other source files and include `griffingLog.h` wher you want to use Griffin Log functionalities.
 
-#### Windows
+### Windows
 * Static Library
     * Make sure CMake is in your PATH environment.
     * Open PowerShell in the repo folder.
