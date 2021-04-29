@@ -4,6 +4,8 @@ A very basic C++ single header only logging library.
 ## Introduction
 Griffin Log is a very basic logging library which, for now, includes only the basics: colored logging info, debug, warnings, critical and fatal, also having a file logger implementation to export the output. 
 
+## Attention
+Griffin Log is a basic logging library built as a practicing project, it needs to be improved a lot and needs refactoring.
 
 ## Building
 Before building, clone the repository into your project folder or any other place. Open a terminal where you want to clone to and execute `git clone https://github.com/juliokscesar/griffinLogCpp`
