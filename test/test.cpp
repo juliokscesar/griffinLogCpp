@@ -43,6 +43,9 @@ int main()
     grflog::critical("This is a file writing test %s message in %d.", "critical", 2021);
     grflog::fatal("This is a file writing test %s message in %d.", "fatal", 2021);
 
+    std::string s = "hello world";
+    grflog::info("std::string format test: %s", s);
+
     for (int i = 0; i < 124; i++)
     {   
         grflog::info("Info from loop!");

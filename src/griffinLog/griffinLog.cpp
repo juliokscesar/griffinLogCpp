@@ -139,6 +139,7 @@ namespace grflog
 
         log_event l_ev(datetime, lvl, std::string(fmt_log));
 
+        // TODO: implement std::string logging
         console_log(l_ev);
         file_log(l_ev);
     }
@@ -153,7 +154,7 @@ namespace grflog
         std::fputs(l_ev.log_lvl_str.c_str(), stdout);
         visual::reset_text_color();
 
-        std::fprintf(stdout, "] %s\n", l_ev.formatted_what.c_str());
+        std::fprintf(stdout, "] %s\n", l_ev.content.c_str());
     }
 
 
@@ -204,7 +205,6 @@ namespace grflog
 
         return is_initialized();
     }
-
 
     void file_logger::write_to_file(const std::string& what)
     {
@@ -263,7 +263,7 @@ namespace grflog
     {
         file_logger& fl = get_file_logger();
         if (fl.is_initialized())
-            fl.write_to_file("[" + l_ev.date_time + "] [" + l_ev.log_lvl_str + "] " + l_ev.formatted_what + "\n");
+            fl.write_to_file("[" + l_ev.date_time + "] [" + l_ev.log_lvl_str + "] " + l_ev.content + "\n");
     }
 
 
