@@ -31,7 +31,7 @@
 #include <cstdarg>
 #include <cstdint>
 
-/* GRIFFIN LOG COMPILER DEFINITIONS */
+/* GRIFFIN LOG PLATFORM DEFINITIONS */
 #if defined(WIN32) || defined(_WIN32)
     #define GRIFFIN_LOG_WIN32
 #else
@@ -41,6 +41,13 @@
         #error Griffin log currently supports Win32 and Linux only
     #endif // __linux__ && !__ANDROID__
 #endif // WIN32 || _WIN32
+
+// Must define _CRT_SECURE_NO_WARNINGS in order to use localtime() with MSVC
+#ifdef _MSC_VER
+    #ifndef _CRT_SECURE_NO_WARNINGS
+        #error _CRT_SECURE_NO_WARNINGS not defined
+    #endif // !_CRT_SECURE_NO_WARNINGS
+#endif // _MSC_VER
 
 // Griffin Color Definitions
 #if defined(GRIFFIN_LOG_WIN32)
