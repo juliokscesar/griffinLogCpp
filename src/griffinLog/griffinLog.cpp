@@ -69,7 +69,7 @@ namespace grflog
     {
         const std::string get_log_lvl_str(const log_level& lvl)
         {
-            const std::array<const std::string, 5> log_level_strs = { "INFO", "DEBUG", "WARN", "CRITICAL", "FATAL" };
+            static const std::array<const std::string, 5> log_level_strs = { "INFO", "DEBUG", "WARN", "CRITICAL", "FATAL" };
             return log_level_strs[static_cast<uint32_t>(lvl)];
         }
 
