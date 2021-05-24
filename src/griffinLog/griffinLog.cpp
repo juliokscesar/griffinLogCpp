@@ -29,6 +29,7 @@
 #include <cstdio>
 #include <array>
 #include <vector>
+#include <utility>
 
 #if defined(GRIFFIN_LOG_WIN32)
     #include <Windows.h>
@@ -61,7 +62,7 @@ namespace grflog
             char datetime[20];
             strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", now);
 
-            return std::string(datetime);
+            return std::string(std::move(datetime));
         }
     }
 
@@ -131,13 +132,11 @@ namespace grflog
 
     void log(log_level lvl, const std::string& what, va_list vaArgs)
     {
-        const std::string datetime = utils::get_date_time();
-
         std::size_t fmt_log_sz = what.size() + 256;
         char fmt_log[fmt_log_sz];
         vsnprintf(fmt_log, fmt_log_sz - 1, what.c_str(), vaArgs);
 
-        log_event l_ev(datetime, lvl, std::string(fmt_log));
+        log_event l_ev(lvl, std::string(fmt_log));
 
         // TODO: implement std::string logging
         console_log(l_ev);

@@ -30,6 +30,7 @@
 #include <fstream>
 #include <cstdarg>
 #include <cstdint>
+#include <utility>
 
 /* GRIFFIN LOG PLATFORM DEFINITIONS */
 #if defined(WIN32) || defined(_WIN32)
@@ -125,8 +126,12 @@ namespace grflog
         /// @param dt Date Time string formatted as: YYYY-mm-dd H:M:S (see utils::get_date_time()).
         /// @param llvl Log Level of this log event.
         /// @param fmt_what "Formatted What" formatted message to log in this event.
-        log_event(const std::string& dt, const log_level& llvl, const std::string& msg)
-            : date_time(dt), lvl(llvl), log_lvl_str(visual::get_log_lvl_str(llvl)), content(msg) {} 
+        log_event(const log_level& llvl, const std::string& msg)
+            : date_time(std::move(utils::get_date_time())), 
+              lvl(llvl), 
+              log_lvl_str(visual::get_log_lvl_str(llvl)), 
+              content(msg) 
+              {} 
     };
 
     // Logging functions
