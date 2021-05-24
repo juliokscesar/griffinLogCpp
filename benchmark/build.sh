@@ -1,1 +1,1 @@
-g++ -Wall -Wextra -o benchmark benchmark.cpp ../src/griffinLog/griffinLog.cpp
+g++ -Wall -Wextra -O2 -o benchmark benchmark.cpp ../src/griffinLog/griffinLog.cpp
