@@ -28,7 +28,7 @@ Before building, clone the repository into your project folder or any other plac
     * Include `griffinLog.h` and link the build library to your project.
 
 * Compiling
-    * Add `griffinLog.cpp` to build with your other source files and include `griffingLog.h` wher you want to use Griffin Log functionalities.
+    * Add `griffinLog.cpp` to build with your other source files and include `griffingLog.h` where you want to use Griffin Log functionalities.
 
 ### Windows
 * Static Library
