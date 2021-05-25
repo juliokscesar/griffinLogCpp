@@ -8,3 +8,5 @@ test/logs/
 test/logs/*
 benchmark/logs/
 benchmark/logs/*
+build/
+build/*
