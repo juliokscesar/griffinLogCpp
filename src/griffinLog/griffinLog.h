@@ -82,6 +82,14 @@ namespace grflog
 
         /// Get the current local date time.
         const std::string get_date_time();
+
+        /**
+         * Utility function to format a C++ string given a C-printf-style format and its va_list
+         * @param fmt Format string with placeholders to replace values.
+         * @param vaArgs Arguments list.
+         * @returns A formatted std::string.
+         */
+        std::string fmt_str(const std::string& fmt, va_list vaArgs);
     }
 
     enum class log_level : uint32_t

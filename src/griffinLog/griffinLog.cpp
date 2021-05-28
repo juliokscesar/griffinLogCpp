@@ -70,6 +70,15 @@ namespace grflog
 
             return std::string(std::move(datetime));
         }
+
+        std::string fmt_str(const std::string& fmt, va_list vaArgs)
+        {
+            std::size_t str_size = fmt.size() + 256;
+            char dest[str_size];
+            vsnprintf(dest, str_size - 1, fmt.c_str(), vaArgs);
+
+            return std::string(dest);
+        }
     }
 
     namespace visual
@@ -138,11 +147,7 @@ namespace grflog
 
     void log(log_level lvl, const std::string& what, va_list vaArgs)
     {
-        std::size_t fmt_log_sz = what.size() + 256;
-        char fmt_log[fmt_log_sz];
-        vsnprintf(fmt_log, fmt_log_sz - 1, what.c_str(), vaArgs);
-
-        log_event l_ev(lvl, std::string(fmt_log));
+        log_event l_ev(lvl, utils::fmt_str(what, vaArgs));
 
         // TODO: implement std::string logging
         console_log(l_ev);
