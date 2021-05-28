@@ -65,7 +65,10 @@ int main()
     grflog::file_logger file("filename.log");
     grflog::set_file_logger(file);
 
-    grflog::warn("We now set the output file to %s", file.get_file_name());
+    grflog::warn("We now set the output file to %s", file.get_file_name().c_str());
+    
+    grflog::info("Stopping file logging...");
+    grflog::stop_file_logging();
 
     grflog::critical("Critical logging");
 

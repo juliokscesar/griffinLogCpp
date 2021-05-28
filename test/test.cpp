@@ -51,6 +51,9 @@ int main()
     grflog::critical("This is a file writing test %s message in %d.", "critical", 2021);
     grflog::fatal("This is a file writing test %s message in %d.", "fatal", 2021);
 
+    grflog::info("Stopping file logging...");
+    grflog::stop_file_logging();
+
     std::string s = "hello world";
     grflog::info("std::string format test: %s", s);
 
