@@ -165,9 +165,10 @@ namespace grflog
         /// @param other file_logger object to copy from.
         file_logger(const file_logger& other);
 
-        file_logger operator=(const file_logger& other)
+        file_logger& operator=(const file_logger& other)
         {
-            return file_logger(other);
+            this->copy_from(other);
+            return *this;
         }
 
         /// Copy file_logger object other to this
