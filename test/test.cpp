@@ -29,6 +29,14 @@ int main()
 {
     std::cout << "Console Test\n";
 
+    for (int i = 0; i < 124; i++)
+    {   
+        grflog::info("Info from loop!");
+        grflog::debug("Debugging from loop %d", i);
+        grflog::critical("It is really critical!");
+        grflog::fatal("Yes fatal is the square of %d which is %d", i, i*i);
+    }
+
     grflog::info("This is an %s message in %d.", "info", 2021);
     grflog::debug("This is a %s message in %d.", "debug", 2021);
     grflog::warn("This is a %s message in %d.", "warn", 2021);
@@ -46,13 +54,6 @@ int main()
     std::string s = "hello world";
     grflog::info("std::string format test: %s", s);
 
-    for (int i = 0; i < 124; i++)
-    {   
-        grflog::info("Info from loop!");
-        grflog::debug("Debugging from loop %d", i);
-        grflog::critical("It is really critical!");
-        grflog::fatal("Yes fatal is the square of %d which is %d", i, i*i);
-    }
 
     return 0;
 }

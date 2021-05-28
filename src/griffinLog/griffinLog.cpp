@@ -37,6 +37,12 @@
     #include <sys/stat.h>
 #endif // GRIFFIN_LOG_WIN32
 
+#define EXPAND_AND_LOG(lvl, what) va_list vaArgs; \
+                                  va_start(vaArgs, what); \
+                                  log(lvl, what, vaArgs); \
+                                  va_end(vaArgs)
+
+
 namespace grflog
 {
     namespace utils
@@ -270,41 +276,26 @@ namespace grflog
 
     void info(const std::string& what, ...)
     {
-        va_list vaArgs;
-        va_start(vaArgs, what);
-        log(log_level::INFO, what, vaArgs);
-        va_end(vaArgs);
+        EXPAND_AND_LOG(log_level::INFO, what);
     }
 
     void debug(const std::string& what, ...)
     {
-        va_list vaArgs;
-        va_start(vaArgs, what);
-        log(log_level::DEBUG, what, vaArgs);
-        va_end(vaArgs);
+        EXPAND_AND_LOG(log_level::DEBUG, what);
     }
 
     void warn(const std::string& what, ...)
     {
-        va_list vaArgs;
-        va_start(vaArgs, what);
-        log(log_level::WARN, what, vaArgs);
-        va_end(vaArgs);
+        EXPAND_AND_LOG(log_level::WARN, what);
     }
 
     void critical(const std::string& what, ...)
     {
-        va_list vaArgs;
-        va_start(vaArgs, what);
-        log(log_level::CRITICAL, what, vaArgs);
-        va_end(vaArgs);
+        EXPAND_AND_LOG(log_level::CRITICAL, what);
     }
 
     void fatal(const std::string& what, ...)
     {
-        va_list vaArgs;
-        va_start(vaArgs, what);
-        log(log_level::FATAL, what, vaArgs);
-        va_end(vaArgs);
+        EXPAND_AND_LOG(log_level::FATAL, what);
     }
 }
