@@ -24,7 +24,7 @@ Before building, clone the repository into your project folder or any other plac
 
 ### Linux
 * Static Library
-    * Run `chmod +x ./build.sh` to execute build.sh.
+    * Run `chmod +x ./build.sh` to allow build.sh execution.
     * Run `./build.sh` in the repo root folder, a folder called "build" will be created and inside it will be the static library built.
     * Include `griffinLog.h` and link the build library to your project.
 
