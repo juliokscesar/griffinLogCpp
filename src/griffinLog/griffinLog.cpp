@@ -65,7 +65,7 @@ namespace grflog
             std::time_t t = std::time(nullptr);
             std::tm* now = std::localtime(&t);
 
-            char datetime[20];
+            char datetime[21];
             strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", now);
 
             return std::string(std::move(datetime));
