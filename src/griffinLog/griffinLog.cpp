@@ -63,17 +63,27 @@ namespace grflog
         const std::string get_date_time()
         {
             std::time_t t = std::time(nullptr);
-            std::tm* now = std::localtime(&t);
+            std::tm now;
+
+            #if defined(GRIFFIN_LOG_WIN32) && defined(_MSC_VER)
+            if (localtime_s(&now, &t) != 0)
+            {
+                std::perror("Error occured while trying to take time:");
+                return std::string("");
+            }
+            #else
+            now = *(localtime(&t));
+            #endif // GRIFFIN_LOG_WIN32 && _MSC_VER
 
             char datetime[21];
-            strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", now);
+            strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", &now);
 
             return std::string(std::move(datetime));
         }
 
         std::string fmt_str(const std::string& fmt, va_list vaArgs)
         {
-            std::size_t str_size = fmt.size() + 256;
+            const std::size_t str_size = fmt.size() + 256;
             char dest[str_size];
             vsnprintf(dest, str_size - 1, fmt.c_str(), vaArgs);
 
