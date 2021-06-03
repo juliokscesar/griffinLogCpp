@@ -22,7 +22,12 @@
 * SOFTWARE.
 */
 
-#include <iostream>
+/*
+Compile With:
+g++ -o bm_million bm_million.cpp ../src/griffinLog/griffinLog.cpp
+*/
+
+#include <stdio.h>
 
 #if defined(WIN32) || defined(_WIN32)
 
@@ -41,48 +46,31 @@
 double get_time()
 {
     #ifdef _WIN32
+
     LARGE_INTEGER t, f;
     QueryPerformanceCounter(&t);
     QueryPerformanceFrequency(&f);
     return (double)t.QuadPart/(double)f.QuadPart;
+
     #else
+
     struct timeval t;
     struct timezone tzp;
     gettimeofday(&t, &tzp);
     return t.tv_sec + t.tv_usec*1e-6;
+
     #endif // _WIN32
 }
 
 int main()
 {
-    double simple_start = get_time();
-    
-    grflog::set_file_logger(grflog::file_logger("benchmark.log"));
+    double start = get_time();
 
-    grflog::info("Writing INFO to log");
-    grflog::debug("Writing %s logging", "debug");
-    grflog::warn("Warning! Log warn benchmarking test");
-    grflog::critical("Testing critical log %s", "on benchmark.cpp");
-    grflog::fatal("Writing fatal %s to log benchmarking", "message");
+    for (int i = 0; i < 1e6; i++)
+        grflog::info("%d", i);
 
-    grflog::stop_file_logging();
+    double end = get_time();
 
-    double simple_end = get_time();
-
-    double loop_log_start = get_time();
-
-    for (int i = 0; i < 100; i++)
-    {
-        grflog::info("Info in loop %d", i);
-        grflog::info("Info in loop %d", i);
-        grflog::fatal("Fatal logging loop squared: %d", i*i);
-    }
-
-    double loop_log_end = get_time();
-
-
-    std::cout << "Simple duration: " << (simple_end - simple_start) * 1000 << " ms\n";
-    std::cout << "Loop duration: " << (loop_log_end - loop_log_start) * 1000 << " ms\n";
-
+    printf("Duration = %fms\n", (end - start) * 1000);
     return 0;
 }
