@@ -74,7 +74,7 @@
 
 namespace grflog
 {
-    namespace utils
+    namespace sys_methods
     {
         /// Create a directory if not exists.
         /// @param dirPath Path to create the new  directory.
@@ -131,11 +131,11 @@ namespace grflog
         const std::string content;
 
         /// Log event constructor, get every needed information for a log event.
-        /// @param dt Date Time string formatted as: YYYY-mm-dd H:M:S (see utils::get_date_time()).
+        /// @param dt Date Time string formatted as: YYYY-mm-dd H:M:S (see sys_methods::get_date_time()).
         /// @param llvl Log Level of this log event.
         /// @param fmt_what "Formatted What" formatted message to log in this event.
         log_event(const log_level& llvl, const std::string& msg)
-            : date_time(std::move(utils::get_date_time())), 
+            : date_time(std::move(sys_methods::get_date_time())), 
               lvl(llvl), 
               log_lvl_str(visual::get_log_lvl_str(llvl)), 
               content(msg) 

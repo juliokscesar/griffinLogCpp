@@ -40,7 +40,7 @@
 
 namespace grflog
 {
-    namespace utils
+    namespace sys_methods
     {
         void make_directory(const std::string& dir_path)
         {
@@ -153,7 +153,7 @@ namespace grflog
 
     void log(log_level lvl, const std::string& what, va_list vaArgs)
     {
-        log_event l_ev(lvl, utils::fmt_str(what, vaArgs));
+        log_event l_ev(lvl, sys_methods::fmt_str(what, vaArgs));
 
         // TODO: implement std::string logging
         console_log(l_ev);
@@ -210,7 +210,7 @@ namespace grflog
 
         if (!is_initialized())
         {
-            utils::make_directory("./logs");
+            sys_methods::make_directory("./logs");
             m_file.open(m_file_path, std::ios::out);
         }
         else
