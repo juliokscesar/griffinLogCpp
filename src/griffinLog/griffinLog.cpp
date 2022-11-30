@@ -30,12 +30,7 @@
 #include <array>
 #include <vector>
 #include <utility>
-
-#if defined(GRIFFIN_LOG_WIN32)
-    #include <Windows.h>
-#elif defined(GRIFFIN_LOG_LINUX)
-    #include <sys/stat.h>
-#endif // GRIFFIN_LOG_WIN32
+#include <memory>
 
 #define EXPAND_AND_LOG(lvl, what) va_list vaArgs; \
                                   va_start(vaArgs, what); \
@@ -84,10 +79,11 @@ namespace grflog
         std::string fmt_str(const std::string& fmt, va_list vaArgs)
         {
             const std::size_t str_size = fmt.size() + 256;
-            char dest[str_size];
-            vsnprintf(dest, str_size - 1, fmt.c_str(), vaArgs);
 
-            return std::string(dest);
+            std::unique_ptr<char[]> dest(new char[str_size]);
+            vsnprintf(dest.get(), str_size - 1, fmt.c_str(), vaArgs);
+
+            return std::string(dest.get());
         }
     }
 

@@ -44,6 +44,12 @@
 #endif // WIN32 || _WIN32
 
 
+#if defined(GRIFFIN_LOG_WIN32)
+    #include <Windows.h>
+#elif defined(GRIFFIN_LOG_LINUX)
+    #include <sys/stat.h>
+#endif // GRIFFIN_LOG_WIN32
+
 // Griffin Color Definitions
 #if defined(GRIFFIN_LOG_WIN32)
     typedef DWORD GRIFFIN_COLOR;
