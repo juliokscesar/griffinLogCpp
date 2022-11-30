@@ -16,8 +16,8 @@ Before building, clone the repository into your project folder or any other plac
     * CMake >=  3.10 (*if you want to build the static library*)
 
 * Windows:
-    * MinGW or
-    * MSVC (Visual Studio)
+    * MinGW or MSVC (Visual Studio)
+    * CMake >= 3.10
 
 * macOS - **Currently not supported**
 
