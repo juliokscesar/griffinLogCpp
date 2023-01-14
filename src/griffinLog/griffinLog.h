@@ -72,6 +72,8 @@
 
 #endif // GRIFFIN_LOG_WIN32
 
+#define GRIFFIN_STR(str) str.c_str()
+
 namespace grflog
 {
     namespace sys_methods

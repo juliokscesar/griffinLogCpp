@@ -55,7 +55,7 @@ int main()
     grflog::stop_file_logging();
 
     std::string s = "hello world";
-    grflog::info("std::string format test: %s", s.c_str());
+    grflog::info("std::string format test: %s", GRIFFIN_STR(s));
 
 
     return 0;
