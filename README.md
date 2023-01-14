@@ -51,11 +51,11 @@ Before building, clone the repository into your project folder or any other plac
 ## Usage
 Griffin Log has 5 different colored levels: Info (blue), Debug (green), Warn (yellow), Critical (red), Fatal (black with red background) and it uses C printf style formatting, with '%' placeholders for different types. See the placeholder table [here](https://www.cplusplus.com/reference/cstdio/printf/) as a reference.
 
-**ATTENTION**: For now, when printing C++ exclusive types (like std::string), you'll need to convert it to a C type (like const char*), because of variardic arguments. One way to do that with `std::string` is calling `std::string::c_str()` as we do in the example below with the file's name.
+**ATTENTION**: For now, when printing C++ exclusive types (like std::string), you'll need to convert it to a C type (like const char*), because of variardic arguments. One way to do that with `std::string` is using the macro `GRIFFIN_STR(str)`, defined in griffinLog.h, as we do in the example below with the file's name.
 
 ### Example
 ```c++
-#include <path/to/griffinLog/griffinLog.h>
+#include <griffinLog/griffinLog.h>
 
 int main()
 {
@@ -67,7 +67,7 @@ int main()
     grflog::file_logger file("filename.log");
     grflog::set_file_logger(file);
 
-    grflog::warn("We now set the output file to %s", file.get_file_name().c_str());
+    grflog::warn("We now set the output file to %s", GRIFFIN_STR(file_logger.get_name()));
     
     grflog::info("Stopping file logging...");
     grflog::stop_file_logging();
