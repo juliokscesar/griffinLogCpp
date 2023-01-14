@@ -63,7 +63,8 @@ int main()
 
     grflog::debug("We are %s in %d", "debugging", 2021);
 
-    // If the 'file' gets destructed in your scope, it will not be finished until you set a new file or until you specify it with grflog::stop_file_logging();
+    // If the 'file' gets destructed in your scope, it will not be finished... 
+    // ...until you set a new file or until you specify it with grflog::stop_file_logging();
     grflog::file_logger file("filename.log");
     grflog::set_file_logger(file);
 
