@@ -35,6 +35,10 @@
 /* GRIFFIN LOG PLATFORM DEFINITIONS */
 #if defined(WIN32) || defined(_WIN32)
     #define GRIFFIN_LOG_WIN32
+
+    #if defined(_MSC_VER) && !defined(_CRT_NO_VA_START_VALIDATION)
+        #error "Add _CRT_NO_VA_START_VALIDATION to your project's preprocessor definitions"
+    #endif // !_CRT_NO_VA_START_VALIDATION
 #else
     #if defined(__linux__) && !defined(__ANDROID__)
         #define GRIFFIN_LOG_LINUX
@@ -52,7 +56,7 @@
 
 // Griffin Color Definitions
 #if defined(GRIFFIN_LOG_WIN32)
-    typedef DWORD GRIFFIN_COLOR;
+    typedef WORD GRIFFIN_COLOR;
 
     #define GRIFFIN_COLOR_RED       0x0c
     #define GRIFFIN_COLOR_GREEN     0x0a
