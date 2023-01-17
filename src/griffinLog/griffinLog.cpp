@@ -32,10 +32,10 @@
 #include <utility>
 #include <memory>
 
-#define EXPAND_AND_LOG(lvl, what) va_list vaArgs; \
-                                  va_start(vaArgs, what); \
-                                  log(lvl, what, vaArgs); \
-                                  va_end(vaArgs)
+#define GRIFFIN_LOG(lvl, what)  va_list vaArgs; \
+                                va_start(vaArgs, what); \
+                                log(lvl, what, vaArgs); \
+                                va_end(vaArgs)
 
 
 namespace grflog
@@ -57,35 +57,52 @@ namespace grflog
 
         const std::string get_date_time()
         {
-            std::time_t t = std::time(nullptr);
-            std::tm now;
+            char datetime[21];
 
             #if defined(GRIFFIN_LOG_WIN32) && defined(_MSC_VER)
-            if (localtime_s(&now, &t) != 0)
-            {
-                std::perror("Error occured while trying to take time:");
-                return std::string("");
-            }
+            
+            SYSTEMTIME lt;
+            GetLocalTime(&lt);
+
+            snprintf(datetime, 20, "%02d-%02d-%02d %02d:%02d:%02d",
+                lt.wYear,
+                lt.wMonth,
+                lt.wDay,
+                lt.wHour,
+                lt.wMinute,
+                lt.wSecond
+            );
+
             #else
+
+            std::time_t t = std::time(nullptr);
+            std::tm now;
             now = *(localtime(&t));
+            strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", &now);
+
             #endif // GRIFFIN_LOG_WIN32 && _MSC_VER
 
-            char datetime[21];
-            strftime(datetime, 20, "%Y-%m-%d %H:%M:%S", &now);
 
             return std::string(std::move(datetime));
         }
 
-        std::string fmt_str(const std::string& fmt, va_list vaArgs)
+        std::string fmt_str(const std::string& fmt, const va_list& vaArgs)
         {
-            const std::size_t str_size = fmt.size() + 256;
+            const int str_size_i = vsnprintf(nullptr, 0, fmt.c_str(), vaArgs);
+            if (str_size_i <= 0)
+            {
+                std::cout << "Error while formatting string\n";
+                return "";
+            }
+            const size_t size = static_cast<size_t>(str_size_i + 1);
 
-            std::unique_ptr<char[]> dest(new char[str_size]);
-            vsnprintf(dest.get(), str_size - 1, fmt.c_str(), vaArgs);
+            std::unique_ptr<char[]> dest = std::make_unique<char[]>(size);
+            vsnprintf(dest.get(), size, fmt.c_str(), vaArgs);
 
-            return std::string(dest.get());
+            return std::string(dest.get(), dest.get() + size - 1);
         }
     }
+
 
     namespace visual
     {
@@ -151,7 +168,7 @@ namespace grflog
         }
     }
 
-    void log(log_level lvl, const std::string& what, va_list vaArgs)
+    void log(const log_level& lvl, const std::string& what, const va_list& vaArgs)
     {
         log_event l_ev(lvl, sys_methods::fmt_str(what, vaArgs));
 
@@ -287,26 +304,26 @@ namespace grflog
 
     void info(const std::string& what, ...)
     {
-        EXPAND_AND_LOG(log_level::INFO, what);
+        GRIFFIN_LOG(log_level::INFO, what);
     }
 
     void debug(const std::string& what, ...)
     {
-        EXPAND_AND_LOG(log_level::DEBUG, what);
+        GRIFFIN_LOG(log_level::DEBUG, what);
     }
 
     void warn(const std::string& what, ...)
     {
-        EXPAND_AND_LOG(log_level::WARN, what);
+        GRIFFIN_LOG(log_level::WARN, what);
     }
 
     void critical(const std::string& what, ...)
     {
-        EXPAND_AND_LOG(log_level::CRITICAL, what);
+        GRIFFIN_LOG(log_level::CRITICAL, what);
     }
 
     void fatal(const std::string& what, ...)
     {
-        EXPAND_AND_LOG(log_level::FATAL, what);
+        GRIFFIN_LOG(log_level::FATAL, what);
     }
 }

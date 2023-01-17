@@ -86,12 +86,12 @@ namespace grflog
         const std::string get_date_time();
 
         /**
-         * Utility function to format a C++ string given a C-printf-style format and its va_list
+         * Utility function to format a C++ string given a C-printf-style format and variardic template arguments
          * @param fmt Format string with placeholders to replace values.
-         * @param vaArgs Arguments list.
+         * @param vaArgs Variadic arguments for vsnprintf
          * @returns A formatted std::string.
          */
-        std::string fmt_str(const std::string& fmt, va_list vaArgs);
+        std::string fmt_str(const std::string& format, const va_list& vaArgs);
     }
 
     enum class log_level : uint32_t
@@ -151,7 +151,7 @@ namespace grflog
     /// @param lvl The log level to use. Enumerated in enum log_level.
     /// @param what The message to be logged.
     /// @param vaArgs Variardic Args to format the log message.
-    void log(log_level lvl, const std::string& what, va_list vaArgs);
+    void log(const log_level& lvl, const std::string& what, const va_list& vaArgs);
 
 
     /// Console logging function, will be called from log().
