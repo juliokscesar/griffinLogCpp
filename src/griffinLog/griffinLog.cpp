@@ -302,27 +302,27 @@ namespace grflog
 
     // Logging level implemented functions
 
-    void info(const std::string& what, ...)
+    void info(const std::string what, ...)
     {
         GRIFFIN_LOG(log_level::INFO, what);
     }
 
-    void debug(const std::string& what, ...)
+    void debug(const std::string what, ...)
     {
         GRIFFIN_LOG(log_level::DEBUG, what);
     }
 
-    void warn(const std::string& what, ...)
+    void warn(const std::string what, ...)
     {
         GRIFFIN_LOG(log_level::WARN, what);
     }
 
-    void critical(const std::string& what, ...)
+    void critical(const std::string what, ...)
     {
         GRIFFIN_LOG(log_level::CRITICAL, what);
     }
 
-    void fatal(const std::string& what, ...)
+    void fatal(const std::string what, ...)
     {
         GRIFFIN_LOG(log_level::FATAL, what);
     }

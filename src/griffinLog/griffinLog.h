@@ -35,10 +35,6 @@
 /* GRIFFIN LOG PLATFORM DEFINITIONS */
 #if defined(WIN32) || defined(_WIN32)
     #define GRIFFIN_LOG_WIN32
-
-    #if defined(_MSC_VER) && !defined(_CRT_NO_VA_START_VALIDATION)
-        #error "Add _CRT_NO_VA_START_VALIDATION to your project's preprocessor definitions"
-    #endif // !_CRT_NO_VA_START_VALIDATION
 #else
     #if defined(__linux__) && !defined(__ANDROID__)
         #define GRIFFIN_LOG_LINUX
@@ -238,27 +234,27 @@ namespace grflog
     
     /// Info logging function, simply calls log() with log_level::INFO
     /// @param what The INFO message to be logged.
-    void info(const std::string& what, ...);
+    void info(const std::string what, ...);
     
 
     /// Debug logging function, simply calls log() with log_level::DEBUG
     /// @param what The DEBUG message to be logged.
-    void debug(const std::string& what, ...);
+    void debug(const std::string what, ...);
 
 
     /// Warn logging function, simply calls log() with log_level::WARN
     /// @param what The WARN message to be logged.
-    void warn(const std::string& what, ...);
+    void warn(const std::string what, ...);
 
 
     /// Critical logging function, simply calls log() with log_level::CRITICAL
     /// @param what The CRITICAL message to be logged.
-    void critical(const std::string& what, ...);
+    void critical(const std::string what, ...);
 
 
     /// Fatal logging function, simply calls log() with log_level::FATAL
     /// @param what The FATAL message to be logged.
-    void fatal(const std::string& what, ...);
+    void fatal(const std::string what, ...);
 }
 
 #endif // GRIFFIN_LOG_H
