@@ -13,11 +13,11 @@ Before building, clone the repository into your project folder or any other plac
 ### Requirements
 * Linux:
     * GCC and G++
-    * CMake >=  3.10 (*if you want to build the static library*)
+    * CMake >=  3.9 (*if you want to build the static library*)
 
 * Windows:
     * MinGW or MSVC (Visual Studio)
-    * CMake >= 3.10
+    * CMake >= 3.9
 
 * macOS - **Currently not supported**
 
@@ -42,11 +42,9 @@ Before building, clone the repository into your project folder or any other plac
 
     * Visual Studio (MSVC)
         * Execute `cmake -G "Visual Studio [version]" ..; cmake --build .`
-        * Add `_CRT_SECURE_NO_WARNINGS` to your project's preprocessor definitions.
 
 * Compiling
-    * Add `griffinLog.cpp` to build with your source files and include `griffinLog.h` where you want to use it. 
-    * If using MSVC, add `_CRT_SECURE_NO_WARNINGS` to your project's preprocessor definitions.
+    * Add `griffinLog.cpp` to build with your source files and include `griffinLog.h` where you want to use it.
 
 ## Usage
 Griffin Log has 5 different colored levels: Info (blue), Debug (green), Warn (yellow), Critical (red), Fatal (black with red background) and it uses C printf style formatting, with '%' placeholders for different types. See the placeholder table [here](https://www.cplusplus.com/reference/cstdio/printf/) as a reference.
