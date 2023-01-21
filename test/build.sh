@@ -1,1 +1,1 @@
-g++ -Wall -Wextra -O2 -o test test.cpp ../src/griffinLog/griffinLog.cpp
+g++ -g -DGRIFFIN_LOG_DEBUG -Wall -Wextra -o test test.cpp ../src/griffinLog/griffinLog.cpp

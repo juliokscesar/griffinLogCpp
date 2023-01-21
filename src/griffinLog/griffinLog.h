@@ -91,7 +91,7 @@ namespace grflog
          * @param vaArgs Variadic arguments for vsnprintf
          * @returns A formatted std::string.
          */
-        std::string fmt_str(const std::string& format, const va_list& vaArgs);
+        std::string fmt_str(const std::string& format, va_list vaArgs);
     }
 
     enum class log_level : uint32_t
@@ -151,7 +151,7 @@ namespace grflog
     /// @param lvl The log level to use. Enumerated in enum log_level.
     /// @param what The message to be logged.
     /// @param vaArgs Variardic Args to format the log message.
-    void log(const log_level& lvl, const std::string& what, const va_list& vaArgs);
+    void log(const log_level& lvl, const std::string& what, va_list vaArgs);
 
 
     /// Console logging function, will be called from log().

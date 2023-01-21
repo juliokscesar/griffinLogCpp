@@ -38,6 +38,12 @@
                                 va_end(vaArgs)
 
 
+#if defined(GRIFFIN_LOG_DEBUG)
+    #define DEBUG_MSG(msg) std::cout << msg
+#else
+    #define DEBUG_MSG(msg)
+#endif // GRIFFIN_LOG_DEBUG
+
 namespace grflog
 {
     namespace sys_methods
@@ -86,7 +92,7 @@ namespace grflog
             return std::string(std::move(datetime));
         }
 
-        std::string fmt_str(const std::string& fmt, const va_list& vaArgs)
+        std::string fmt_str(const std::string& fmt, va_list vaArgs)
         {
             const int str_size_i = vsnprintf(nullptr, 0, fmt.c_str(), vaArgs);
             if (str_size_i <= 0)
@@ -168,7 +174,7 @@ namespace grflog
         }
     }
 
-    void log(const log_level& lvl, const std::string& what, const va_list& vaArgs)
+    void log(const log_level& lvl, const std::string& what, va_list vaArgs)
     {
         log_event l_ev(lvl, sys_methods::fmt_str(what, vaArgs));
 
