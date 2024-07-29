@@ -32,31 +32,23 @@ int main()
     for (int i = 0; i < 124; i++)
     {   
         grflog::info("Info from loop!");
-        grflog::debug("Debugging from loop %i", i);
+        grflog::debug("Debugging from loop {}", i);
         grflog::critical("It is really critical!");
-        grflog::fatal("Yes fatal is the square of %i which is %i", i, i*i);
+        grflog::fatal("Yes fatal is the square of {} which is {}", i, i*i);
     }
 
-    grflog::info("This is an %s message in %d.", "info", 2021);
-    grflog::debug("This is a %s message in %d.", "debug", 2021);
-    grflog::warn("This is a %s message in %d.", "warn", 2021);
-    grflog::critical("This is a %s message in %d.", "critical", 2021);
-    grflog::fatal("This is a %s message in %d.", "fatal", 2021);
+    grflog::info("This is an {} message in {}.", "info", 2021);
+    grflog::debug("This is a {} message in {}.", "debug", 2021);
+    grflog::warn("This is a {} message in {}.", "warn", 2021);
+    grflog::critical("This is a {} message in {}.", "critical", 2021);
+    grflog::fatal("This is a {} message in {}.", "fatal", 2021);
 
     grflog::set_file_logger(grflog::file_logger("test.log"));
 
-    grflog::info("This is a file writing test %s message in %d.", "info", 2021);
-    grflog::debug("This is a file writing test %s message in %d.", "debug", 2021);
-    grflog::warn("This is a file writing test %s message in %d.", "warn", 2021);
-    grflog::critical("This is a file writing test %s message in %d.", "critical", 2021);
-    grflog::fatal("This is a file writing test %s message in %d.", "fatal", 2021);
+    grflog::info("Now testing {} logging", "file");
+    grflog::warn("Using std::format to format like this: {}", ":O");
 
-    grflog::info("Stopping file logging...");
     grflog::stop_file_logging();
-
-    std::string s = "hello world";
-    grflog::info("std::string format test: %s", GRIFFIN_STR(s));
-
 
     return 0;
 }

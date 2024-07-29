@@ -1,6 +1,10 @@
-cmake_minimum_required(VERSION 3.9)
+cmake_minimum_required(VERSION 3.28)
 
-project(griffinLog VERSION 0.1)
+project(griffinLog VERSION 0.2)
+
+set(CMAKE_CXX_STANDARD 20)
+
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # CMAKE_BUILD_TYPE set to Debug by default. If you want release, just use "cmake .. -DCMAKE_BUILD_TYPE=Release"
 if (NOT CMAKE_BUILD_TYPE)
@@ -15,3 +19,7 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 set(SRC_FILES src/griffinLog/griffinLog.cpp)
 
 add_library(griffinLog STATIC ${SRC_FILES})
+
+target_include_directories(griffinLog PUBLIC src)
+
+
