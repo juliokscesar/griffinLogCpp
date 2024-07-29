@@ -22,13 +22,12 @@
 * SOFTWARE.
 */
 
-#include "griffinLog.h"
+#include "griffinLog.hpp"
 
 #include <cstdint>
 #include <ctime>
 #include <cstdio>
 #include <array>
-#include <vector>
 #include <utility>
 #include <memory>
 
@@ -97,7 +96,7 @@ namespace grflog
             const int str_size_i = vsnprintf(nullptr, 0, fmt.c_str(), vaArgs);
             if (str_size_i <= 0)
             {
-                std::cout << "Error while formatting string\n";
+		critical("Couldn't format string");
                 return "";
             }
             const size_t size = static_cast<size_t>(str_size_i + 1);
@@ -155,7 +154,7 @@ namespace grflog
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            std::fputs(color.c_str(), stdout);
+            std::fputs(color.c_str(), stderr);
 
             #endif
         }
@@ -168,7 +167,7 @@ namespace grflog
 
             #elif defined(GRIFFIN_LOG_LINUX)
 
-            std::fputs(GRIFFIN_COLOR_RESET, stdout);
+            std::fputs(GRIFFIN_COLOR_RESET, stderr);
 
             #endif
         }
@@ -187,13 +186,13 @@ namespace grflog
     {
         visual::reset_text_color();
 
-        std::fprintf(stdout, "[%s] [", l_ev.date_time.c_str());
+        std::fprintf(stderr, "[%s] [", l_ev.date_time.c_str());
 
         visual::set_text_color(l_ev.lvl);
-        std::fputs(l_ev.log_lvl_str.c_str(), stdout);
+        std::fputs(l_ev.log_lvl_str.c_str(), stderr);
         visual::reset_text_color();
 
-        std::fprintf(stdout, "] %s\n", l_ev.content.c_str());
+        std::fprintf(stderr, "] %s\n", l_ev.content.c_str());
     }
 
 

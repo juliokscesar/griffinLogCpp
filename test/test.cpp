@@ -23,7 +23,7 @@
 */
 
 #include <iostream>
-#include "../src/griffinLog/griffinLog.h"
+#include "griffinLog/griffinLog.hpp"
 
 int main()
 {
@@ -32,9 +32,9 @@ int main()
     for (int i = 0; i < 124; i++)
     {   
         grflog::info("Info from loop!");
-        grflog::debug("Debugging from loop %d", i);
+        grflog::debug("Debugging from loop %i", i);
         grflog::critical("It is really critical!");
-        grflog::fatal("Yes fatal is the square of %d which is %d", i, i*i);
+        grflog::fatal("Yes fatal is the square of %i which is %i", i, i*i);
     }
 
     grflog::info("This is an %s message in %d.", "info", 2021);

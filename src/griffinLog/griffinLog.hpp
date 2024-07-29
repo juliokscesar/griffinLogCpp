@@ -22,11 +22,8 @@
 * SOFTWARE.
 */
 
+#pragma once
 
-#ifndef GRIFFIN_LOG_H
-#define GRIFFIN_LOG_H
-
-#include <iostream>
 #include <fstream>
 #include <cstdarg>
 #include <cstdint>
@@ -256,5 +253,3 @@ namespace grflog
     /// @param what The FATAL message to be logged.
     void fatal(const std::string what, ...);
 }
-
-#endif // GRIFFIN_LOG_H
