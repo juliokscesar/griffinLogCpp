@@ -25,9 +25,11 @@
 #pragma once
 
 #include <fstream>
-#include <cstdarg>
 #include <cstdint>
 #include <utility>
+#include <string_view>
+#include <string>
+#include <format>
 
 /* GRIFFIN LOG PLATFORM DEFINITIONS */
 #if defined(WIN32) || defined(_WIN32)
@@ -71,6 +73,8 @@
 
 #define GRIFFIN_STR(str) str.c_str()
 
+#define GRIFFIN_LOG(lvl, what, args)  log(lvl, what, std::forward<Args>((args))...)
+
 namespace grflog
 {
     namespace sys_methods
@@ -87,8 +91,12 @@ namespace grflog
          * @param fmt Format string with placeholders to replace values.
          * @param vaArgs Variadic arguments for vsnprintf
          * @returns A formatted std::string.
-         */
-        std::string fmt_str(const std::string& format, va_list vaArgs);
+         */ 
+	template<typename ... Args>
+        std::string fmt_str(std::string_view fmt, Args&& ... args)
+        {
+	    return std::vformat(fmt, std::make_format_args(args...));
+        }
     }
 
     enum class log_level : uint32_t
@@ -134,7 +142,7 @@ namespace grflog
         /// @param llvl Log Level of this log event.
         /// @param fmt_what "Formatted What" formatted message to log in this event.
         log_event(const log_level& llvl, const std::string& msg)
-            : date_time(std::move(sys_methods::get_date_time())), 
+            : date_time((sys_methods::get_date_time())), 
               lvl(llvl), 
               log_lvl_str(visual::get_log_lvl_str(llvl)), 
               content(msg) 
@@ -143,13 +151,7 @@ namespace grflog
 
     // Logging functions
 
-    /// Main logging function, will create a log_event struct object with the needed information and 
-    /// call console_log() and file_log() (if file was added) passing the created log_event.
-    /// @param lvl The log level to use. Enumerated in enum log_level.
-    /// @param what The message to be logged.
-    /// @param vaArgs Variardic Args to format the log message.
-    void log(const log_level& lvl, const std::string& what, va_list vaArgs);
-
+    
 
     /// Console logging function, will be called from log().
     /// @param l_ev Log event struct to be used for logging the information in the console.
@@ -189,7 +191,7 @@ namespace grflog
         /// Initialize the file logging, will be called on add_file_log(). 
         /// If the file's name wasn't provided, it will open (or create) a file called by default "grflog_file.log"
         /// @returns true if successfully opened and initialized the file, otherwise return false if couldn't open the file.
-        bool init_file_logging();
+        bool init_file_logging(bool include_date_in_name=true);
 
         /// Write any string to the file, get called on log() with every information in a log_event struct.
         /// @param what string message to be written.
@@ -217,7 +219,7 @@ namespace grflog
     /// Set the file_logger object to be used for file logging, by default grflog only logs to console.
     /// If a file was previously openned, it will be finished and will open the new one.
     /// @param file file_logger object to be used. If file's name is empty, throw an exception.
-    void set_file_logger(const file_logger& file);
+    void set_file_logger(const file_logger& file, bool include_date_in_name=true);
 
     /// Stop current file from logging if there is one.
     void stop_file_logging();
@@ -226,30 +228,65 @@ namespace grflog
     /// @param l_ev Log event struct to be used for logging the information into a file.
     void file_log(const log_event& l_ev);
 
+    /// Main logging function, will create a log_event struct object with the needed information and 
+    /// call console_log() and file_log() (if file was added) passing the created log_event.
+    /// @param lvl The log level to use. Enumerated in enum log_level.
+    /// @param what The message to be logged.
+    /// @param args Values to format in message 'what'
+    template<typename ... Args>
+    void log(const log_level& lvl, const std::string& what, Args&&... args)
+    {
+	std::string formatted = sys_methods::fmt_str(what, std::forward<Args>(args)...);
 
+        log_event l_ev(lvl, formatted);
+
+        console_log(l_ev);
+        file_log(l_ev);
+    }
     // Level implemented logging functions
     
     /// Info logging function, simply calls log() with log_level::INFO
     /// @param what The INFO message to be logged.
-    void info(const std::string what, ...);
-    
+    template<typename ... Args>
+    void info(const std::string& what, Args&& ... args)
+    {
+        GRIFFIN_LOG(log_level::INFO, what, args);
+    }
+   
 
     /// Debug logging function, simply calls log() with log_level::DEBUG
     /// @param what The DEBUG message to be logged.
-    void debug(const std::string what, ...);
+    template<typename ... Args>
+    void debug(const std::string& what, Args&& ... args)
+    {
+        GRIFFIN_LOG(log_level::DEBUG, what, args);
+    }
+
 
 
     /// Warn logging function, simply calls log() with log_level::WARN
     /// @param what The WARN message to be logged.
-    void warn(const std::string what, ...);
+    template<typename ... Args>
+    void warn(const std::string& what, Args&& ... args)
+    {
+        GRIFFIN_LOG(log_level::WARN, what, args);
+    }   
 
 
     /// Critical logging function, simply calls log() with log_level::CRITICAL
     /// @param what The CRITICAL message to be logged.
-    void critical(const std::string what, ...);
+    template<typename ... Args>
+    void critical(const std::string& what, Args&& ... args)
+    {
+        GRIFFIN_LOG(log_level::CRITICAL, what, args);
+    }
 
 
     /// Fatal logging function, simply calls log() with log_level::FATAL
     /// @param what The FATAL message to be logged.
-    void fatal(const std::string what, ...);
+    template<typename ... Args>
+    void fatal(const std::string& what, Args&& ... args)
+    {
+        GRIFFIN_LOG(log_level::FATAL, what, args);
+    }
 }

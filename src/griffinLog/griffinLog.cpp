@@ -29,16 +29,12 @@
 #include <cstdio>
 #include <array>
 #include <utility>
-#include <memory>
 
-#define GRIFFIN_LOG(lvl, what)  va_list vaArgs; \
-                                va_start(vaArgs, what); \
-                                log(lvl, what, vaArgs); \
-                                va_end(vaArgs)
+#define GRIFFIN_LOG(lvl, what, args)  log(lvl, what, std::forward<Args>((args))...)
 
 
 #if defined(GRIFFIN_LOG_DEBUG)
-    #define DEBUG_MSG(msg) std::cout << msg
+    #define DEBUG_MSG(msg) std::cout << msg << '\n'
 #else
     #define DEBUG_MSG(msg)
 #endif // GRIFFIN_LOG_DEBUG
@@ -91,21 +87,7 @@ namespace grflog
             return std::string(std::move(datetime));
         }
 
-        std::string fmt_str(const std::string& fmt, va_list vaArgs)
-        {
-            const int str_size_i = vsnprintf(nullptr, 0, fmt.c_str(), vaArgs);
-            if (str_size_i <= 0)
-            {
-		critical("Couldn't format string");
-                return "";
-            }
-            const size_t size = static_cast<size_t>(str_size_i + 1);
-
-            std::unique_ptr<char[]> dest = std::make_unique<char[]>(size);
-            vsnprintf(dest.get(), size, fmt.c_str(), vaArgs);
-
-            return std::string(dest.get(), dest.get() + size - 1);
-        }
+	
     }
 
 
@@ -114,6 +96,7 @@ namespace grflog
         const std::string get_log_lvl_str(const log_level& lvl)
         {
             static const std::array<const std::string, 5> log_level_strs = { "INFO", "DEBUG", "WARN", "CRITICAL", "FATAL" };
+	    
             return log_level_strs[static_cast<uint32_t>(lvl)];
         }
 
@@ -173,14 +156,7 @@ namespace grflog
         }
     }
 
-    void log(const log_level& lvl, const std::string& what, va_list vaArgs)
-    {
-        log_event l_ev(lvl, sys_methods::fmt_str(what, vaArgs));
-
-        // TODO: implement std::string logging
-        console_log(l_ev);
-        file_log(l_ev);
-    }
+    
 
     void console_log(const log_event& l_ev)
     {
@@ -225,10 +201,16 @@ namespace grflog
         return m_file.is_open();
     }
 
-    bool file_logger::init_file_logging()
+    bool file_logger::init_file_logging(bool include_date_in_name)
     {
         if (m_file_name.empty() && m_file_path.empty())
             set_file_name("grflog_file.log");
+
+	if (include_date_in_name)
+	{
+	    std::string date = sys_methods::get_date_time().substr(0, 10);
+	    set_file_name(date + m_file_name);
+	}
 
         if (!is_initialized())
         {
@@ -283,12 +265,12 @@ namespace grflog
         return f;
     }
 
-    void set_file_logger(const file_logger& file)
+    void set_file_logger(const file_logger& file, bool include_date_in_name)
     {
         file_logger& fl = get_file_logger();
 
         fl.copy_from(file);
-        if (!fl.init_file_logging())
+        if (!fl.init_file_logging(include_date_in_name))
             critical("Couldn't add file");
     }
 
@@ -307,28 +289,9 @@ namespace grflog
 
     // Logging level implemented functions
 
-    void info(const std::string what, ...)
-    {
-        GRIFFIN_LOG(log_level::INFO, what);
-    }
+    
 
-    void debug(const std::string what, ...)
-    {
-        GRIFFIN_LOG(log_level::DEBUG, what);
-    }
+   
 
-    void warn(const std::string what, ...)
-    {
-        GRIFFIN_LOG(log_level::WARN, what);
-    }
-
-    void critical(const std::string what, ...)
-    {
-        GRIFFIN_LOG(log_level::CRITICAL, what);
-    }
-
-    void fatal(const std::string what, ...)
-    {
-        GRIFFIN_LOG(log_level::FATAL, what);
-    }
+    
 }

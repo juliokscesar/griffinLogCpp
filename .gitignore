@@ -10,3 +10,4 @@ benchmark/logs/
 benchmark/logs/*
 build/
 build/*
+*compile_commands*
