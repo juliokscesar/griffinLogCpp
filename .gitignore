@@ -5,9 +5,8 @@
 *.out
 *.log
 test/logs/
-test/logs/*
 benchmark/logs/
-benchmark/logs/*
 build/
-build/*
+build-test/
+build-benchmark/
 *compile_commands*

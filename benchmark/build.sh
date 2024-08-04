@@ -1,1 +1,5 @@
-g++ -Wall -Wextra -O2 -o benchmark benchmark.cpp ../src/griffinLog/griffinLog.cpp
+mkdir -p build-benchmark/
+cd build-benchmark
+cmake ..
+cmake --build .
+

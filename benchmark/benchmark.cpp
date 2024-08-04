@@ -35,7 +35,7 @@
 
 #endif // WIN32 || _WIN32
 
-#include "../src/griffinLog/griffinLog.h"
+#include "../src/griffinLog/griffinLog.hpp"
 
 
 double get_time()
@@ -60,10 +60,10 @@ int main()
     grflog::set_file_logger(grflog::file_logger("benchmark.log"));
 
     grflog::info("Writing INFO to log");
-    grflog::debug("Writing %s logging", "debug");
+    grflog::debug("Writing {} logging", "debug");
     grflog::warn("Warning! Log warn benchmarking test");
     grflog::critical("Testing critical log %s", "on benchmark.cpp");
-    grflog::fatal("Writing fatal %s to log benchmarking", "message");
+    grflog::fatal("Writing fatal {} to log benchmarking", "message");
 
     grflog::stop_file_logging();
 
@@ -73,9 +73,9 @@ int main()
 
     for (int i = 0; i < 100; i++)
     {
-        grflog::info("Info in loop %d", i);
-        grflog::info("Info in loop %d", i);
-        grflog::fatal("Fatal logging loop squared: %d", i*i);
+        grflog::info("Info in loop {}", i);
+        grflog::info("Info in loop {}", i);
+        grflog::fatal("Fatal logging loop squared: {}", i*i);
     }
 
     double loop_log_end = get_time();

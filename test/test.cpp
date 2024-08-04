@@ -50,5 +50,8 @@ int main()
 
     grflog::stop_file_logging();
 
+    std::string s = "this is a c++ string";
+    grflog::info("std::string logging: {}", s);
+
     return 0;
 }

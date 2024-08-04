@@ -71,8 +71,6 @@
 
 #endif // GRIFFIN_LOG_WIN32
 
-#define GRIFFIN_STR(str) str.c_str()
-
 #define GRIFFIN_LOG(lvl, what, args)  log(lvl, what, std::forward<Args>((args))...)
 
 namespace grflog
@@ -99,7 +97,7 @@ namespace grflog
         }
     }
 
-    enum class log_level : uint32_t
+    enum class log_level : uint8_t
     {
         INFO        =       0,
         DEBUG       =       1,

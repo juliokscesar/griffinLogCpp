@@ -40,7 +40,7 @@ g++ -o bm_million bm_million.cpp ../src/griffinLog/griffinLog.cpp
 
 #endif // WIN32 || _WIN32
 
-#include "../src/griffinLog/griffinLog.h"
+#include "../src/griffinLog/griffinLog.hpp"
 
 
 double get_time()
