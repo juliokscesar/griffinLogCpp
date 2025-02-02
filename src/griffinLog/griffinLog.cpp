@@ -156,8 +156,7 @@ namespace grflog
         }
     }
 
-    
-
+    static bool g_flush_console_enabled = true;
     void console_log(const log_event& l_ev)
     {
         visual::reset_text_color();
@@ -169,8 +168,14 @@ namespace grflog
         visual::reset_text_color();
 
         std::fprintf(stderr, "] %s\n", l_ev.content.c_str());
+
+        if (g_flush_console_enabled)
+            std::fflush(stderr);
     }
 
+    void set_console_flush(bool flush_console) {
+        g_flush_console_enabled = flush_console;
+    }
 
     // File logging function and class implementations
 
@@ -286,12 +291,4 @@ namespace grflog
             fl.write_to_file("[" + l_ev.date_time + "] [" + l_ev.log_lvl_str + "] " + l_ev.content + "\n");
     }
 
-
-    // Logging level implemented functions
-
-    
-
-   
-
-    
 }

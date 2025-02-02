@@ -155,6 +155,9 @@ namespace grflog
     /// @param l_ev Log event struct to be used for logging the information in the console.
     void console_log(const log_event& l_ev);
 
+    /// Set if should flush console at every log
+    /// @param flushConsole set on or off
+    void set_console_flush(bool flush_console);
 
     // File logging functions and class
 
